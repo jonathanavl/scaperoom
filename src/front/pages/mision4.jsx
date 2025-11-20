@@ -6,17 +6,30 @@ export const Mision4 = () => {
 
     const lines = [
         "",
-        "El último fragmento no está tan desprotegido.",
-        "Se oculta donde el frío no es enemigo, sino custodio.",
+        "El último fragmento no está",
+        "tan desprotegido.",
+        "Se oculta donde el frío no es ",
+        "sino custodio.",
+
         "",
-        "Allí, en un santuario pálido como el alba,",
-        "reposan los hijos más frágiles de un cascarón perdido.",
+        "Allí, en un santuario pálido",
+        "como el alba,",
+
+        "reposan los hijos más frágiles",
+        "de un cascarón perdido.",
+
         "",
-        "Busca el nido artificial donde cada cuna es idéntica,",
-        "y cada morada espera romperse para cumplir su destino.",
+        "Busca el nido artificial donde",
+        "cada cuna es idéntica,",
+
+        "y cada morada espera rompersE",
+        " para cumplir su destino.",
+
         "",
         "No fuerces nada.",
-        "Lo que buscas no está dentro de lo quebradizo,",
+        "Lo que buscas no está dentro ",
+        " e lo quebradizo,",
+
         "sino entre sus sombras.",
         "",
     ];
