@@ -1,19 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# Build frontend
+# Build frontend React
 npm install
 npm run build
 
-# Instalar pipenv si no existe
-if ! command -v pipenv &> /dev/null
-then
-    echo "Instalando pipenv..."
-    pip install --user pipenv
-    export PATH=$HOME/.local/bin:$PATH
-fi
+# Instalar pipenv sin --user
+pip install pipenv
 
-# Instalar dependencias Python
-pipenv install
-
-# Gunicorn ya estará disponible
+# Instalar dependencias Python (Flask, Gunicorn, etc.)
+pipenv install --dev
