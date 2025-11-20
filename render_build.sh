@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# Node.js build
+# Build frontend
 npm install
 npm run build
 
-# 🚫 Pipenv omitido, ya que Flask no es necesario para producción frontend
-# pipenv install
-# pipenv run upgrade
+# Instalar pipenv si no existe
+if ! command -v pipenv &> /dev/null
+then
+    echo "Instalando pipenv..."
+    pip install --user pipenv
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+# Instalar dependencias Python
+pipenv install
+
+# Gunicorn ya estará disponible
