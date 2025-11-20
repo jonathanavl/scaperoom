@@ -1,52 +1,114 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Home = () => {
+  const { dispatch } = useGlobalReducer();
 
-	const { store, dispatch } = useGlobalReducer()
+  // --- Texto máquina de escribir ---
+  const lines = [
+    "▲ ACCESO NO AUTORIZADO",
+    "",
+    "Su dispositivo ha sido infiltrado",
+    "por la agencia S.H.A.D.O.W.",
+    "Tranquilo/a... no es peligroso.",
+    "",
+    "Pero sí MUY importante.",
+    "",
+    "Hemos detectado un objeto único",
+    "escondido cerca de usted.",
+	"",
+    "Para desbloquear su ubicación",
+    "exacta deberá completar",
+	"La Operación FXXXX-01.",
+	"",
+    "Pulse INICIAR MISIÓN para continuar.",
+  ];
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const [displayText, setDisplayText] = useState("");
+  const [lineIndex, setLineIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [typing, setTyping] = useState(true);
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
+  useEffect(() => {
+    if (!typing || lineIndex >= lines.length) return;
 
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
+    const currentLine = lines[lineIndex];
 
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
+    const timeout = setTimeout(() => {
+      if (charIndex < currentLine.length) {
+        setDisplayText((d) => d + currentLine[charIndex]);
+        setCharIndex((c) => c + 1);
+      } else {
+        setDisplayText((d) => d + "\n");
+        setLineIndex((l) => l + 1);
+        setCharIndex(0);
+      }
+    }, currentLine === "" ? 300 : 45);
 
-			return data
+    return () => clearTimeout(timeout);
+  }, [charIndex, lineIndex, typing]);
 
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
+  const handleStart = () => {
+    window.location.href = "/mision";
+  };
 
-	}
+  return (
+    <div className=" bg-black text-white p-4">
+      <div className=" w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-white/10 pb-2">
 
-	useEffect(() => {
-		loadMessage()
-	}, [])
+        {/* Cabecera estilo FBI */}
+        <div className="relative z-10 p-4 bg-black/60 backdrop-blur-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 flex items-center justify-center rounded bg-red-700/90 text-white font-bold">
+                FBI
+              </div>
+              <div>
+                <div className="text-xs text-red-400">SISTEMA</div>
+                <div className="text-sm font-semibold tracking-wide">
+                  ACCESO RESTRINGIDO
+                </div>
+              </div>
+            </div>
+            <div className="text-xs text-gray-400">MÓVIL — MODO INVASIÓN</div>
+          </div>
+        </div>
 
-	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
-	);
-}; 
+        {/* Terminal */}
+        <div className="relative z-10 p-6 pb-8 bg-black/75">
+<div className="w-full max-w-full px-2 mx-auto">
+           <pre
+  aria-live="polite"
+  className="whitespace-pre-wrap break-words break-all overflow-hidden max-w-full text-sm leading-relaxed font-mono text-green-300/90"
+  style={{ minHeight: 220 }}
+>
+
+              {displayText}
+              <span
+                className={`inline-block ml-1 ${typing ? "animate-pulse" : "opacity-60"}`}
+              >
+                █
+              </span>
+            </pre>
+          </div>
+        </div>
+
+        {/* Botón */}
+        <div className="relative z-10 p-4 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-center">
+          <button
+            onClick={handleStart}
+            className="w-full py-3 rounded-xl text-lg font-bold uppercase tracking-wide bg-red-600/95 hover:bg-red-700 active:scale-95 transition-transform shadow-lg"
+          >
+            INICIAR MISIÓN
+          </button>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-[10px] text-gray-500 py-2">
+          Operación FXXXX-01 • Confidencial — Agencia S.H.A.D.O.W.
+        </div>
+
+      </div>
+    </div>
+  );
+};
